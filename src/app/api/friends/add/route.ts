@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { email: emailToAdd } = addFriendValidator.parse(body.email);
-    console.log(emailToAdd);
+    // console.log(emailToAdd);
     const RESTResponse = await fetch(
       `${process.env.UPSTASH_REDIS_REST_URL}/get/user:email:${emailToAdd}`,
       {
