@@ -1,8 +1,11 @@
 import FriendRequestsSidebarOption from "@/components/FriendRequestsSidebarOption";
+import SidebarChatList from "@/components/SidebarChatList";
 import SignOutButton from "@/components/SignOutButton";
 import { Icon, Icons } from "@/components/icons";
+import { getFriendsByUserId } from "@/helpers/get-friends-by-usre-id";
 import { fetchRedis } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
+import { User } from "@/types/dbss";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +32,9 @@ const sideBarOptions: SidebarOption[] = [
 const Layout = async ({ children }: LayoutProps) => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
+
+  const friends = await getFriendsByUserId(session.user.id);
+
   const unseenRequestCount = (
     (await fetchRedis(
       "smembers",
@@ -42,13 +48,15 @@ const Layout = async ({ children }: LayoutProps) => {
           <Icons.Logo className="h-8 w-auto text-indigo-600" />
         </Link>
 
-        <div className="text-xs font-semibold leading-6 text-gray-400">
+        {friends.length>0?<div className="text-xs font-semibold leading-6 text-gray-400">
           Your chats
-        </div>
+        </div>:null}
 
         <nav className="flex-flex-1 h-full flex-col">
           <ul role="list" className="flex flex-1 flex-col h-full gap-y-7">
-            <li>// chats that this user has</li>
+            <li>
+              <SidebarChatList sessionId={session.user.id} friends={friends}/>
+            </li>
             <li>
               <div className="text-xs font-semibold leading-6 text-gray-400">
                 Overview
@@ -65,18 +73,18 @@ const Layout = async ({ children }: LayoutProps) => {
                         <span className="text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
                           <Icon className="h-4 w-4" />
                         </span>
-                        <span className="truncate">{option.name}</span>
+                        <div className="truncate">{option.name}</div>
                       </Link>
                     </li>
                   );
                 })}
-              </ul>
-            </li>
             <li>
               <FriendRequestsSidebarOption
                 sessionId={session.user.id}
                 initialUnseenRequestCount={unseenRequestCount}
               />
+            </li>
+              </ul>
             </li>
             <li className="-mx-6 mt-auto flex items-center">
               <div className="flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900">

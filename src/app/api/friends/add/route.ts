@@ -47,6 +47,7 @@ export async function POST(req: Request) {
 
     //valid request, send friend request
     db.sadd(`user:${idToAdd}:incoming_friend_requests`, session.user.id)
+    // db.sadd(`user:${session.user.id}:incoming_friend_requests`, idToAdd)
     return new Response("OK")
   } catch (error) {
     if(error instanceof z.ZodError){
