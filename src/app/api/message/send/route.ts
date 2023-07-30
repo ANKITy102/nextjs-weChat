@@ -1,6 +1,7 @@
 import { fetchRedis } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { pusherServer } from "@/lib/pusher";
 import { Message, messageValidator } from "@/lib/validations/message";
 import { User } from "@/types/dbss";
 import { nanoid } from "nanoid";
@@ -37,6 +38,12 @@ export async function POST(req:Request){
         }
         const message = messageValidator.parse(messageData)
 
+        pusherServer.trigger(`chats_${chatId}`,"incoming_message",message)
+        pusherServer.trigger(`User_${friendId}_chatsNoti`, "chat_notifications",{
+            ...message,
+            senderImg: sender.image,
+            senderName: sender.name
+        })
         //all valid, send the message
         await db.zadd(`chat:${chatId}:messages`, {  // z add to store in sorted format
             score: timestamp,

@@ -1,19 +1,53 @@
 "use client";
+import { pusherClient } from "@/lib/pusher2";
 import { chatHrefConstructor } from "@/lib/utils";
 import { Message } from "@/lib/validations/message";
 import { User } from "@/types/dbss";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import UnseenChatToast from "./UnseenChatToast";
 
 interface SidebarChatListProps {
   friends: User[]
   sessionId: string
 }
-
+interface ExtendedMessage extends Message{
+  senderImg: string,
+  senderName: string
+}
 const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [unseenMessages, setUnseenMessages] = useState<Message[]>([]);
+  useEffect(()=>{
+    const chatHandler  =async (message: ExtendedMessage) =>{
+      const shouldNotify = pathname !== `/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId)}`
+      if(!shouldNotify) return;
+      toast.custom((t)=>
+        // custom component
+        <UnseenChatToast 
+          t={t}
+          sessionId={sessionId}
+          senderId={message.senderId}
+          senderImg={message.senderImg}
+          senderMessage={message.text}
+          senderName={message.senderName}
+        />
+      )
+    }
+    const friendHandler  =async (data: IncomingFriendRequest) =>{
+      window.location.reload()
+    }
+   var channel = pusherClient.subscribe(`User_${sessionId}_chatsNoti`);
+   var channel2 = pusherClient.subscribe(`User_${sessionId}_friendsNoti`);
+   channel.bind("chat_notifications", chatHandler);
+   channel2.bind("friend_notifications", friendHandler);
+
+return ()=>{
+   pusherClient.unsubscribe(`User_${sessionId}_chatsNoti`);
+   pusherClient.unsubscribe(`User_${sessionId}_friendsNoti`);}
+},[sessionId])
   useEffect(() => {
     if (pathname?.includes("chat")) {
       setUnseenMessages((prev) => {

@@ -45,7 +45,7 @@ const page = async ({ params }: pageProps) => {
   }
   const chatPartnerId = user.id === userId1 ? userId2 : userId1;
   const chatPartner = (await db.get(`user:${chatPartnerId}`)) as User;
-  const initialMessages = await getChatMessages(chatId);
+  const initialMessages = await getChatMessages(chatId) as Messages[] | [];
   return (
     <div className="flex-1 justify-between flex flex-col h-full max-h-[calc(100vh-6rem)]">
       <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
@@ -73,7 +73,7 @@ const page = async ({ params }: pageProps) => {
           </div>
         </div>
       </div>
-      <Messagesc chatPartner={chatPartner} sessionImg={session.user.image}  intialMessages={initialMessages} sessionId={session.user.id}/>
+      <Messagesc chatId={chatId} chatPartner={chatPartner} sessionImg={session.user.image}  intialMessages={initialMessages} sessionId={session.user.id}/>
       <ChatInput chatId={chatId} chatPartner={chatPartner}/>
     </div>
   );

@@ -10,7 +10,7 @@ const page: FC<pageProps> = ({}) => {
   async function loginWithGoogle() {
     setIsLoading(true)
     try {
-     
+      // console.log("Hi")
        await signIn('google');
           
     } catch (error) {

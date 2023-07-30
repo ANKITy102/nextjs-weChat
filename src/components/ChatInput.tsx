@@ -15,6 +15,7 @@ const ChatInput: FC<ChatInputProps> = ({chatPartner, chatId}) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [input, setInput] = useState<string>("");
     const sendMessage = async() =>{
+        if(!input) return;
         setIsLoading(true);
         try {
             // await new Promise((resolve)=> setTimeout(resolve,1000));
