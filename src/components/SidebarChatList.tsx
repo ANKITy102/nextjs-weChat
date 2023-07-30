@@ -20,7 +20,7 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [unseenMessages, setUnseenMessages] = useState<Message[]>([]);
-  useEffect(()=>{
+useEffect(()=>{
     const chatHandler  =async (message: ExtendedMessage) =>{
       const shouldNotify = pathname !== `/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId)}`
       if(!shouldNotify) return;
@@ -35,6 +35,7 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
           senderName={message.senderName}
         />
       )
+      setUnseenMessages((prev)=> [...prev, message]);
     }
     const friendHandler  =async (data: IncomingFriendRequest) =>{
       window.location.reload()
@@ -47,7 +48,8 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
 return ()=>{
    pusherClient.unsubscribe(`User_${sessionId}_chatsNoti`);
    pusherClient.unsubscribe(`User_${sessionId}_friendsNoti`);}
-},[sessionId])
+},[sessionId, pathname]);
+
   useEffect(() => {
     if (pathname?.includes("chat")) {
       setUnseenMessages((prev) => {
@@ -70,7 +72,7 @@ return ()=>{
             }`}
             className="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6"
             >{friend.name}
-            {unseenMessageCount>0? <div className=" bg-indigo-600 font-medium text-xs text-white w-4 h-4 rounded-full flex justify-center items-center"></div>:(null)}
+            {unseenMessageCount>0? <div className=" bg-indigo-600 font-medium text-xs text-white w-4 h-4 rounded-full flex justify-center items-center">{unseenMessageCount}</div>:(null)}
             </a>
         </li>
       })}

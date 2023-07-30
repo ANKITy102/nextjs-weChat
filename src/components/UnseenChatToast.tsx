@@ -35,9 +35,10 @@ const UnseenChatToast: FC<UnseenChatToastProps> = ({
         href={`/dashboard/chat/${chatHrefConstructor(sessionId, senderId)}`}
       >
         <div className="flex-shrink-0 pt-0.5">
-          <div className="">
+          <div className="relative h-10 w-10">
             <Image 
-            fill referrerPolicy="no-referrer" 
+            fill 
+            referrerPolicy="no-referrer" 
                 className="rounded-full"
                 src={senderImg}
                 alt={`${senderName} profile picture`}
@@ -55,7 +56,7 @@ const UnseenChatToast: FC<UnseenChatToastProps> = ({
             text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500  
             "
         >
-            close
+          close
         </button>
       </div>
     </div>

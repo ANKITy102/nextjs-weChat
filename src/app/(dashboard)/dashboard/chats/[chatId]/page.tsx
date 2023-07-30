@@ -30,11 +30,12 @@ async function getChatMessages(chatId: string) {
     const messages = messageArrayValidator.parse(reversedMessages) ;
     return messages ;
   } catch (error) {
-
+      
   }
 }
 
 const page = async ({ params }: pageProps) => {
+  // await new Promise((resolve)=> setTimeout(resolve, 5000));
   const { chatId } = params;
   const session = await getServerSession(authOptions);
   if (!session) notFound();

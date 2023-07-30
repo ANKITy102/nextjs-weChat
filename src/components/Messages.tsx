@@ -41,7 +41,7 @@ const Messages: FC<MessagesProps> = ({
 return ()=>{
     pusherClient.subscribe(`chats_${chatId}`);
 }
-},[sessionId])
+},[sessionId, chatId])
 
 
   const formatTimeStamp = (timeStamp: number) => {
