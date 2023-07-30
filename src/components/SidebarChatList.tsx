@@ -47,7 +47,10 @@ useEffect(()=>{
 
 return ()=>{
    pusherClient.unsubscribe(`User_${sessionId}_chatsNoti`);
-   pusherClient.unsubscribe(`User_${sessionId}_friendsNoti`);}
+   pusherClient.unsubscribe(`User_${sessionId}_friendsNoti`);
+  //  channel.ubind("chat_notifications", chatHandler);
+  //  channel2.bind("friend_notifications", friendHandler);
+  }
 },[sessionId, pathname]);
 
   useEffect(() => {
