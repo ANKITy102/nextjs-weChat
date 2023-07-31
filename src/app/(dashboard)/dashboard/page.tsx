@@ -43,7 +43,7 @@ const page = async({})=>{
           </div>
 
           <Link
-            href={`/dashboard/chat/${chatHrefConstructor(
+            href={`/dashboard/chats/${chatHrefConstructor(
               session.user.id,
               friend.id
             )}`}
