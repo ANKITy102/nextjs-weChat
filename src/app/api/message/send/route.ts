@@ -36,8 +36,10 @@ export async function POST(req:Request){
             text,
             timestamp
         }
-        const message = messageValidator.parse(messageData)
+        const message = messageValidator.parse(messageData);
+        console.log("do dfsdfd")
         pusherServer.trigger(`chats_${chatId}`,"incoming_message",message)
+        console.log(friendId)
         pusherServer.trigger(`User_${friendId}_chatsNoti`, "chat_notifications",{
             ...message,
             senderImg: sender.image,

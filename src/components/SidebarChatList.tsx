@@ -17,12 +17,13 @@ interface ExtendedMessage extends Message{
   senderName: string
 }
 const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
-  const router = useRouter();
+
   const pathname = usePathname();
   const [unseenMessages, setUnseenMessages] = useState<Message[]>([]);
 useEffect(()=>{
     const chatHandler  =async (message: ExtendedMessage) =>{
       const shouldNotify = pathname !== `/dashboard/chats/${chatHrefConstructor(sessionId, message.senderId)}`
+      console.log("got the message")
       if(!shouldNotify) return;
       toast.custom((t)=>
         // custom component
@@ -42,6 +43,7 @@ useEffect(()=>{
     }
    var channel = pusherClient.subscribe(`User_${sessionId}_chatsNoti`);
    var channel2 = pusherClient.subscribe(`User_${sessionId}_friendsNoti`);
+   console.log("me getting message", sessionId);
    channel.bind("chat_notifications", chatHandler);
    channel2.bind("friend_notifications", friendHandler);
 
