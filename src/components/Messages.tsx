@@ -31,15 +31,12 @@ const Messages: FC<MessagesProps> = ({
 
   useEffect(()=>{
     const messageHandler  =async (message: Messages) =>{
-        // console.log("hi live message")
         setMessages((prev) => [message, ...prev]);
     }
-
-    console.log(sessionId);
    var channel = pusherClient.subscribe(`chats_${chatId}`);
    channel.bind("incoming_message", messageHandler);
 return ()=>{
-    pusherClient.subscribe(`chats_${chatId}`);
+    pusherClient.unsubscribe(`chats_${chatId}`);
 }
 },[sessionId, chatId])
 

@@ -37,7 +37,6 @@ export async function POST(req:Request){
             timestamp
         }
         const message = messageValidator.parse(messageData)
-
         pusherServer.trigger(`chats_${chatId}`,"incoming_message",message)
         pusherServer.trigger(`User_${friendId}_chatsNoti`, "chat_notifications",{
             ...message,

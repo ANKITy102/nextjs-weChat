@@ -39,7 +39,7 @@ const page = async({})=>{
           key={friend.id}
           className='relative bg-zinc-50 border border-zinc-200 p-3 rounded-md'>
           <div className='absolute right-4 inset-y-0 flex items-center'>
-            <ChevronRight className='h-7 w-7 text-zinc-400' />
+            <ChevronRight className='h-7 w-7 text-zinc-400'/>
           </div>
 
           <Link

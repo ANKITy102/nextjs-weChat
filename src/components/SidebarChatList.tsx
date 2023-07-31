@@ -22,7 +22,7 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
   const [unseenMessages, setUnseenMessages] = useState<Message[]>([]);
 useEffect(()=>{
     const chatHandler  =async (message: ExtendedMessage) =>{
-      const shouldNotify = pathname !== `/dashboard/chat/${chatHrefConstructor(sessionId, message.senderId)}`
+      const shouldNotify = pathname !== `/dashboard/chats/${chatHrefConstructor(sessionId, message.senderId)}`
       if(!shouldNotify) return;
       toast.custom((t)=>
         // custom component
